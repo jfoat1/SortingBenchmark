@@ -5,21 +5,34 @@ import java.util.Random;
 public class Main {
 
 	public static void main(String[] args) {
-		int[] bubbleArray = generate_random_unique(1,300000,20000);
-		int[] selectionArray = copyArray(bubbleArray); 
+		int[] selectionArray = generate_random_unique(1,500000,20000);
+		int[] bubbleArray = copyArray(selectionArray);
+		int[] insertionArray = copyArray(selectionArray);
 		//arrayPrint(bubbleArray);
 		Long startBubble = System.currentTimeMillis();
 		bubbleSort(bubbleArray);
 		Long endBubble = System.currentTimeMillis();
 		Long bubbleTime = endBubble - startBubble;
+		
 		//arrayPrint(selectionArray);
 		Long startSelect = System.currentTimeMillis();
 		selectionSort(selectionArray);
 		Long endSelect = System.currentTimeMillis();
 		Long selectTime = endSelect - startSelect;
-		System.out.println("Sorting a random array size of 200000:");
+		
+		//arrayPrint(insertionArray);
+		//insertionSort(insertionArray);
+		//arrayPrint(insertionArray);
+		
+		Long startInsert = System.currentTimeMillis();
+		insertionSort(insertionArray);
+		Long endInsert = System.currentTimeMillis();
+		Long insertTime = endInsert - startInsert;
+		
+		System.out.println("Sorting a random array size of 20000:");
 		System.out.println("Bubble sort took " + bubbleTime + "ms to complete.");
 		System.out.println("Selection sort took " + selectTime + "ms to complete.");
+		System.out.println("Insertion sort took " + insertTime + "ms to complete.");
 	}
 
 	public static boolean Scan(int[] input, int target)
@@ -106,5 +119,21 @@ public class Main {
 			arr[smallestIndex] = temp;
 		}
 		return arr; 
+	}
+	
+	public static int[] insertionSort(int[] arr)
+	{
+		for(int i = 1; i < arr.length; i++)
+		{
+			int j = i; 
+			while(j > 0 && arr[j] < arr[j - 1])
+			{
+				int temp = arr[j - 1];
+				arr[j - 1] = arr[j];
+				arr[j] = temp;
+				j--;
+			}
+		}
+		return arr;
 	}
 }
