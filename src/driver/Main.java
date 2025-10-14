@@ -5,9 +5,10 @@ import java.util.Random;
 public class Main {
 
 	public static void main(String[] args) {
-		int[] selectionArray = generate_random_unique(1,500000,20000);
+		int[] selectionArray = generate_random_unique(1,100000,50000);
 		int[] bubbleArray = copyArray(selectionArray);
 		int[] insertionArray = copyArray(selectionArray);
+		int[] shellArray = copyArray(selectionArray);
 		//arrayPrint(bubbleArray);
 		Long startBubble = System.currentTimeMillis();
 		bubbleSort(bubbleArray);
@@ -29,10 +30,18 @@ public class Main {
 		Long endInsert = System.currentTimeMillis();
 		Long insertTime = endInsert - startInsert;
 		
-		System.out.println("Sorting a random array size of 20000:");
+		Long startShell = System.currentTimeMillis();
+		//arrayPrint(shellArray);
+		shellSort(shellArray);
+		//arrayPrint(shellArray);
+		Long endShell = System.currentTimeMillis();
+		Long shellTime = endShell - startShell;
+		
+		System.out.println("Sorting a random array size of 50000:");
 		System.out.println("Bubble sort took " + bubbleTime + "ms to complete.");
 		System.out.println("Selection sort took " + selectTime + "ms to complete.");
 		System.out.println("Insertion sort took " + insertTime + "ms to complete.");
+		System.out.println("Shell sort took " + shellTime + "ms to complete.");
 	}
 
 	public static boolean Scan(int[] input, int target)
@@ -123,7 +132,7 @@ public class Main {
 	
 	public static int[] insertionSort(int[] arr)
 	{
-		for(int i = 1; i < arr.length; i++)
+		for(int i = 0; i < arr.length; i++)
 		{
 			int j = i; 
 			while(j > 0 && arr[j] < arr[j - 1])
@@ -135,5 +144,52 @@ public class Main {
 			}
 		}
 		return arr;
+	}
+	
+	public static void insertionSort(int[] arr, int range) 
+	{
+		for(int k = 0; k < range; k++) 
+		{
+		    for (int i = k; i < arr.length; i = i + range) 
+		    {
+		        int current = i;
+		        while ((current - range) >= 0 && arr[current] < arr[current-range]) 
+		        {
+		            int temp = arr[current];
+		            arr[current] = arr[current - range];
+		            arr[current - range] = temp;
+		            current = current - range;
+		        }
+		    }
+		}
+	}
+	
+	public static void shellSort(int[] arr, int[] intervals) 
+	{
+		for(int k : intervals) 
+		{
+			insertionSort(arr, k);
+		}
+	}
+	
+	public static void shellSort(int[] arr)
+	{
+		double log2 = Math.log(arr.length) / Math.log(2);
+		for(int k : twoIntervals(log2))
+		{
+			insertionSort(arr, k);
+		}
+	}
+	
+	public static int[] twoIntervals(double number)
+	{
+		int intNumber = (int) number;
+		int[] answer = new int[intNumber + 1];
+		for(int i = 0; i < answer.length; i++)
+		{
+			answer[i] = (int) Math.pow(2, (double) intNumber); 
+			intNumber--; 
+		}
+		return answer; 
 	}
 }
