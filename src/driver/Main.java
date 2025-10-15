@@ -5,11 +5,14 @@ import java.util.Random;
 public class Main {
 
 	public static void main(String[] args) {
-		int[] selectionArray = generate_random_unique(1,100000,50000);
-		int[] bubbleArray = copyArray(selectionArray);
-		int[] insertionArray = copyArray(selectionArray);
+		int[] selectionArray = generate_random_unique(1, 100000000, 200000);
+		//int[] bubbleArray = copyArray(selectionArray);
+		//int[] insertionArray = copyArray(selectionArray);
 		int[] shellArray = copyArray(selectionArray);
+		int[] quickArray = copyArray(selectionArray);
 		//arrayPrint(bubbleArray);
+		
+		/*
 		Long startBubble = System.currentTimeMillis();
 		bubbleSort(bubbleArray);
 		Long endBubble = System.currentTimeMillis();
@@ -29,6 +32,7 @@ public class Main {
 		insertionSort(insertionArray);
 		Long endInsert = System.currentTimeMillis();
 		Long insertTime = endInsert - startInsert;
+		*/
 		
 		Long startShell = System.currentTimeMillis();
 		//arrayPrint(shellArray);
@@ -37,11 +41,19 @@ public class Main {
 		Long endShell = System.currentTimeMillis();
 		Long shellTime = endShell - startShell;
 		
-		System.out.println("Sorting a random array size of 50000:");
-		System.out.println("Bubble sort took " + bubbleTime + "ms to complete.");
-		System.out.println("Selection sort took " + selectTime + "ms to complete.");
-		System.out.println("Insertion sort took " + insertTime + "ms to complete.");
+		//arrayPrint(quickArray);
+		Long startQuick = System.currentTimeMillis();
+		quickSort(quickArray, 0, quickArray.length - 1);
+		Long endQuick = System.currentTimeMillis();
+		Long quickTime = endQuick - startQuick;
+		//arrayPrint(quickArray);
+		
+		System.out.println("Sorting a random array size of 200000:");
+		//System.out.println("Bubble sort took " + bubbleTime + "ms to complete.");
+		//System.out.println("Selection sort took " + selectTime + "ms to complete.");
+		//System.out.println("Insertion sort took " + insertTime + "ms to complete.");
 		System.out.println("Shell sort took " + shellTime + "ms to complete.");
+		System.out.println("Quick sort took " + quickTime + "ms to complete.");
 	}
 
 	public static boolean Scan(int[] input, int target)
@@ -191,5 +203,54 @@ public class Main {
 			intNumber--; 
 		}
 		return answer; 
+	}
+	
+	public static int partition(int[] arr, int low, int high)
+	{
+		int pivot = (low + high)/2;
+		int pivotv = arr[pivot];
+		
+		boolean done = false;
+		
+		while(!done)
+		{
+			while(arr[low] < pivotv)
+			{
+				low++; 
+			}
+			
+			while(arr[high] > pivotv)
+			{
+				high--;
+			}
+			
+			if(low >= high)
+			{
+				done = true;
+			}
+			else
+			{
+				int temp = arr[low];
+				arr[low] = arr[high];
+				arr[high] = temp; 
+				
+				low++; 
+				high--; 
+			}
+		}
+		return high;
+	}
+	
+	public static void quickSort(int[] arr, int start, int end)
+	{
+		if(start >= end)
+		{
+			return;
+		}
+		
+		int lowEnd = partition(arr, start, end);
+		
+		quickSort(arr, start, lowEnd);
+		quickSort(arr, lowEnd + 1, end);
 	}
 }
