@@ -5,11 +5,12 @@ import java.util.Random;
 public class Main {
 
 	public static void main(String[] args) {
-		int[] selectionArray = generate_random_unique(1, 100000000, 200000);
-		//int[] bubbleArray = copyArray(selectionArray);
-		//int[] insertionArray = copyArray(selectionArray);
+		int[] selectionArray = generate_random(1, 1000000000, 100000000);
+		int[] bubbleArray = copyArray(selectionArray);
+		int[] insertionArray = copyArray(selectionArray);
 		int[] shellArray = copyArray(selectionArray);
 		int[] quickArray = copyArray(selectionArray);
+		int[] mergeArray = copyArray(selectionArray);
 		//arrayPrint(bubbleArray);
 		
 		/*
@@ -32,14 +33,15 @@ public class Main {
 		insertionSort(insertionArray);
 		Long endInsert = System.currentTimeMillis();
 		Long insertTime = endInsert - startInsert;
-		*/
 		
+		
+		//arrayPrint(shellArray);
 		Long startShell = System.currentTimeMillis();
-		//arrayPrint(shellArray);
 		shellSort(shellArray);
-		//arrayPrint(shellArray);
 		Long endShell = System.currentTimeMillis();
 		Long shellTime = endShell - startShell;
+		//arrayPrint(shellArray);
+		 */
 		
 		//arrayPrint(quickArray);
 		Long startQuick = System.currentTimeMillis();
@@ -48,12 +50,22 @@ public class Main {
 		Long quickTime = endQuick - startQuick;
 		//arrayPrint(quickArray);
 		
-		System.out.println("Sorting a random array size of 200000:");
+		//arrayPrint(mergeArray);
+		Long startMerge = System.currentTimeMillis();
+		mergeSort(mergeArray, 0, mergeArray.length - 1);
+		Long endMerge = System.currentTimeMillis();
+		Long mergeTime = endMerge - startMerge;
+		//arrayPrint(mergeArray);
+		
+		
+		
+		System.out.println("Sorting a random array size of 100,000,000:");
 		//System.out.println("Bubble sort took " + bubbleTime + "ms to complete.");
 		//System.out.println("Selection sort took " + selectTime + "ms to complete.");
 		//System.out.println("Insertion sort took " + insertTime + "ms to complete.");
-		System.out.println("Shell sort took " + shellTime + "ms to complete.");
+		//System.out.println("Shell sort took " + shellTime + "ms to complete.");
 		System.out.println("Quick sort took " + quickTime + "ms to complete.");
+		System.out.println("Merge sort took " + mergeTime + "ms to complete.");
 	}
 
 	public static boolean Scan(int[] input, int target)
@@ -92,6 +104,17 @@ public class Main {
 					result[i] = number; 
 				}
 			}
+		}
+		return result; 
+	}
+	
+	public static int[] generate_random(int start, int end, int total)
+	{
+		int[] result = new int[total];
+		Random random = new Random(); 
+		for(int i = 0; i < total; i++)
+		{
+			result[i] = random.nextInt(start, end + 1);
 		}
 		return result; 
 	}
@@ -252,5 +275,61 @@ public class Main {
 		
 		quickSort(arr, start, lowEnd);
 		quickSort(arr, lowEnd + 1, end);
+	}
+	
+	public static void merge(int[] arr, int leftmost, int leftlast, int rightlast)
+	{
+		int mergedSize = rightlast - leftmost + 1;
+		int[] mergedArray = new int[mergedSize];
+		int leftPos = leftmost;
+		int rightPos = leftlast + 1;
+		int mergePos = 0;
+		
+		while(leftPos <= leftlast && rightPos <= rightlast)
+		{
+			if(arr[leftPos] <= arr[rightPos])
+			{
+				mergedArray[mergePos] = arr[leftPos];
+				leftPos++;
+			}
+			else
+			{
+				mergedArray[mergePos] = arr[rightPos];
+				rightPos++;
+			}
+			mergePos++;
+		}
+		
+		while(leftPos <= leftlast)
+		{
+			mergedArray[mergePos] = arr[leftPos];
+			leftPos++;
+			mergePos++;
+		}
+		
+		while(rightPos <= rightlast)
+		{
+			mergedArray[mergePos] = arr[rightPos];
+			rightPos++;
+			mergePos++;
+		}
+		
+		for(int i = 0; i < mergedSize; i++)
+		{
+			arr[leftmost + i] = mergedArray[i];
+		}
+	}
+	
+	public static void mergeSort(int[] arr, int startIndex, int endIndex)
+	{
+		if(startIndex < endIndex)
+		{
+			int mid = (startIndex + endIndex)/2;
+			
+			mergeSort(arr, startIndex, mid);
+			mergeSort(arr, mid + 1, endIndex);
+			
+			merge(arr, startIndex, mid, endIndex);
+		}
 	}
 }
